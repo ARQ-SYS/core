@@ -1,3 +1,11 @@
+//! # Overview
+//! Arq Plugins is a crate that will allow you to create plugins for Arq Core  
+//! This will be a simple tutorial as well as a technical refference, if you'd like to go in yourself
+//! It uses Rust FFI under the hood with the C ABI, so seqfaults can happen. I've *hopefully* made it foolproof enough,  
+//! that you hopefully won't encounter any. But in a case that it happens, don't hesisate to create an issue [here](https://github.com/ARQ-SYS/ARQ)
+
+
+
 pub mod component;
 pub mod manager;
 pub mod middleware;
