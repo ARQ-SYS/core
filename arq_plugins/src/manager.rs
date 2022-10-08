@@ -41,7 +41,7 @@ impl PluginManager {
         let component_constructor: Symbol<ComponentConstructor> = lib.get(b"_arq_component_constructor")?;
         let raw = component_constructor();
         let component = Box::from_raw(raw);
-        debug!("Loaded component: {}", component.name());
+        info!("Loaded component: {}", component.name());
         component.on_component_load();
         self.components.push(component);
 
@@ -111,7 +111,7 @@ impl PluginManager {
         let middleware_constructor: Symbol<MiddlewareConstructor> = lib.get(b"_arq_middleware_constructor")?;
         let raw = middleware_constructor();
         let middleware = Box::from_raw(raw);
-        debug!("Loaded middleware: {}", middleware.name());
+        info!("Loaded middleware: {}", middleware.name());
         middleware.on_middleware_load();
         self.middlewares.push(middleware);
 

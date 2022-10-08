@@ -72,7 +72,7 @@ impl DynFairing {
         }
     }   
 }
-
+#[allow(unused)]
 #[rocket::async_trait]
 impl Fairing for DynFairing {
     fn info(&self) -> rocket::fairing::Info {
