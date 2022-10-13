@@ -1,8 +1,5 @@
-
-use std::{mem, any::Any};
-use rocket::{fairing::Fairing, Request, Data, Response};
-
-
+use rocket::{fairing::Fairing, Data, Request, Response};
+use std::{any::Any, mem};
 
 /// This trait is used when one wants to add middleware to the ARQ_CORE.
 /// This acts as a request guard and so should be used with caution, as it could interfiere with the base CORE routes.
@@ -18,17 +15,18 @@ pub trait MiddlewareComponent: Any + Send + Sync {
     fn middlewares(&self) -> (*mut Box<dyn Fairing>, usize, usize);
 }
 
-
 /// This struct is used to export the component's middlewares to the CORE.
 /// It must be used alongside the macro `declare_middleware!`, so the ComponentManager can find the MiddlewareComponent.
 pub struct MiddlewareFactory {
-    pub middlewares: Vec<Box<dyn Fairing>>
+    pub middlewares: Vec<Box<dyn Fairing>>,
 }
 
 impl MiddlewareFactory {
     /// Construct a new MiddlewareFactory
     pub fn new() -> Self {
-        MiddlewareFactory { middlewares: Vec::new() }
+        MiddlewareFactory {
+            middlewares: Vec::new(),
+        }
     }
     /// Add a single middleware to be exported
     pub fn add_middleware(mut self, middleware: Box<dyn Fairing>) -> Self {
@@ -43,7 +41,6 @@ impl MiddlewareFactory {
     /// Export all the middlewares to be mounted by CORE
     /// This consumes the factory
     pub fn export(mut self) -> (*mut Box<dyn Fairing>, usize, usize) {
-
         self.middlewares.shrink_to_fit();
         assert!(self.middlewares.len() == self.middlewares.capacity());
 
@@ -53,24 +50,20 @@ impl MiddlewareFactory {
         mem::forget(self.middlewares);
 
         (ptr, len, len)
-
     }
-
 }
 
 /// A struct that will act as a wrapper for `dyn Fairing` since rocket cannot attach `dyn Trait` as a middleware
 /// This should only be used by the ComponentManager, users do not need to worry about this
 pub struct DynFairing {
-    inner: Box<dyn Fairing>
+    inner: Box<dyn Fairing>,
 }
 
 impl DynFairing {
     /// Constructs a new DynFairing
     pub fn from(inner: Box<dyn Fairing>) -> Self {
-        Self {
-            inner
-        }
-    }   
+        Self { inner }
+    }
 }
 #[allow(unused)]
 #[rocket::async_trait]

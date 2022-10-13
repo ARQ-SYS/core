@@ -20,7 +20,7 @@
 //! ```  
 //! Now you're all set!
 //! ## Writing a simple plugin
-//! First we need to create a struct that will represent our plugin. 
+//! First we need to create a struct that will represent our plugin.
 //! There are two types of possible things we could export - Component (just rocket paths) and Middleware (just rocket fairings).  
 //! For this example we'll create a Component.
 //! ```rust
@@ -28,11 +28,11 @@
 //! #[derive(Default)]
 //! pub struct MyComponent;
 //! ```
-//! 
+//!
 //! <p style="background:rgba(255,181,77,0.16);padding:0.75em;">
 //!     <strong>Warning:</strong> And and All state should be handled by rocket Guards.  The Component struct shouldn't have any fields.   
 //! </p>
-//! 
+//!
 //! A struct like this won't help us much. To be exportable, we need to implement a trait - `Component`.  
 //! ```rust
 //! pub trait Component {
@@ -57,9 +57,9 @@
 //! fn greet() -> &'static str {
 //!     "Hello friend!"
 //! }
-//! 
+//!
 //! impl Component for MyComponent {
-//! 
+//!
 //!     fn name(&self) -> &'static str { "MyComponent" }
 //!     fn routes(&self) -> (*mut Route, usize, usize) {
 //!         let mut factory = ComponentFactory::new();
@@ -67,19 +67,18 @@
 //!         // Now we export
 //!         factory.export()
 //!         // And it's done
-//!     } 
-//! 
+//!     }
+//!
 //! }
 //! ```
 //! This makes all the routes visible to CORE.  
 //! But we're not done yet, as core can't see our Component. What we have to do, is add a `declare_component!()` macro call like so
 //! ```rust
-//! / ... / 
+//! / ... /
 //! declare_component!(MyComponent, MyComponent::default)
 //! ```
 //! After this, your plugin should be loadable by CORE
 //! If you need more resources, take a look at example plugins
-
 
 pub mod component;
 pub mod manager;
@@ -107,9 +106,8 @@ macro_rules! declare_component {
             let boxed: Box<dyn Component> = Box::new(objet);
             Box::into_raw(boxed)
         }
-    }
+    };
 }
-
 
 /// This macro is used to declare a middleware.
 /// It must be used excatly once per project.
@@ -127,5 +125,5 @@ macro_rules! declare_middleware {
             let boxed: Box<dyn MiddlewareComponent> = Box::new(objet);
             Box::into_raw(boxed)
         }
-    }
+    };
 }

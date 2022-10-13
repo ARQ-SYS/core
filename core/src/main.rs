@@ -2,7 +2,7 @@ use anyhow::Context;
 use arq_plugins::prelude::*;
 use std::path::PathBuf;
 use structopt::StructOpt;
-use tracing::{info, debug};
+use tracing::{debug, info};
 use tracing_subscriber::EnvFilter;
 use walkdir::WalkDir;
 
@@ -10,7 +10,7 @@ use walkdir::WalkDir;
 async fn main() {
     // Configure a custom event formatter
     let format = tracing_subscriber::fmt::format()
-        .with_level(false) // don't include levels in formatted output
+        .with_level(true) // include levels in formatted output
         .with_target(false) // don't include targets
         .with_thread_ids(false) // include the thread ID of the current thread
         .with_thread_names(false) // include the name of the current thread
@@ -25,7 +25,7 @@ async fn main() {
 
     let opt = Opt::from_args();
 
-    info!("Staring ARQ CORE");
+    info!("Staring ARQ_CORE");
     unsafe {
         dotenv::dotenv().ok();
 
@@ -34,7 +34,7 @@ async fn main() {
         let plugin_location = std::env::var("PLUGIN_LOCATION")
             .context("PLUGIN_LOCATION not set")
             .unwrap_or_else(|_| "./plugins".to_string());
-        
+
         debug!("Looking for plugins in {}", &plugin_location);
 
         let ignore_corrupted_plugins =
@@ -73,8 +73,11 @@ async fn main() {
             .await
             .context("Something went wrong!")
             .unwrap();
+        // After core stops
+        info!("ARQ_CORE is Offline")
     }
 }
+
 #[derive(StructOpt, Debug)]
 #[structopt(name = "basic")]
 struct Opt {
