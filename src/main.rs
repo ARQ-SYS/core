@@ -3,7 +3,7 @@ use arq_plugins::prelude::*;
 use std::path::PathBuf;
 use structopt::StructOpt;
 use tracing::{debug, info};
-use tracing_subscriber::EnvFilter;
+// use tracing_subscriber::EnvFilter;
 use walkdir::WalkDir;
 
 #[tokio::main]
@@ -16,11 +16,11 @@ async fn main() {
         .with_thread_names(false) // include the name of the current thread
         .compact(); // use the `Compact` formatting style.
 
-    let filter = EnvFilter::new("debug");
+    //let filter = EnvFilter::new("debug");
 
     tracing_subscriber::fmt()
         .event_format(format)
-        .with_env_filter(filter)
+    //    .with_file(filter)
         .init();
 
     let opt = Opt::from_args();
